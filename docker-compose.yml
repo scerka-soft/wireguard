@@ -12,9 +12,9 @@ services:
       - UI_ENABLE_SORT_CLIENTS=true
       - UI_TRAFFIC_STATS=true
       - UI_CHART_TYPE=1
-      
+
       - WG_HOST=10.0.2.15
-      - WG_PORT=55555    
+      - WG_PORT=55555
       - WG_DEFAULT_ADDRESS=10.8.0.x
       - WG_MTU=1420
       - WG_DEFAULT_DNS=8.8.8.8, 8.8.4.4

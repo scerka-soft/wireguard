@@ -1,1 +1,1 @@
-# wireguard1
+# wireguard

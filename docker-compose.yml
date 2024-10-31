@@ -1,61 +1,45 @@
-volumes:
-  wg:
-
 services:
   wg-easy:
     environment:
-      - LANG=ru
-      - WEBUI_HOST=0.0.0.0
-      - PASSWORD_HASH=$$2a$$12$$ldlVdG4gG0B0b0AOw02OnuKFXizGdSj2ny8jfM0fGVQzsBoR7YzNC
-      - PORT=8080
-      - MAX_AGE=1440
-      - UI_ENABLE_SORT_CLIENTS=true
-      - UI_TRAFFIC_STATS=true
-      - UI_CHART_TYPE=1
+      - LANG=${WGE_LANG}
+      - WEBUI_HOST=${WGE_WEBUI_HOST}
+      - PASSWORD_HASH=${WGE_PASSWORD_HASH}
+      - PORT=${WGE_PORT}
+      - MAX_AGE=${WGE_MAX_AGE}
+      - UI_ENABLE_SORT_CLIENTS=${WGE_UI_ENABLE_SORT_CLIENTS}
+      - UI_TRAFFIC_STATS=${WGE_UI_TRAFFIC_STATS}
+      - UI_CHART_TYPE=${WGE_UI_CHART_TYPE}
+      - WG_HOST=${WG_HOST}
+      - WG_PORT=${WG_PORT}
+      - WG_DEFAULT_ADDRESS=${WG_DEFAULT_ADDRESS}
+      - WG_MTU=${WG_MTU}
+      - WG_PERSISTENT_KEEPALIVE=${WG_KEEPALIVE}
+      - WG_DEFAULT_DNS=${WG_DNS}
+      - WG_ALLOWED_IPS=${WG_ALLOWED_IPS}
+      - WG_ENABLE_ONE_TIME_LINKS=${WGE_ENABLE_ONE_TIME_LINKS}
 
-      - WG_HOST=10.0.2.15
-      - WG_PORT=55555
-      - WG_DEFAULT_ADDRESS=10.8.0.x
-      - WG_MTU=1420
-      - WG_PERSISTENT_KEEPALIVE=60
-      - WG_DEFAULT_DNS=8.8.8.8, 8.8.4.4
-      - WG_ALLOWED_IPS=0.0.0.0/0, ::/0
-      - WG_ENABLE_ONE_TIME_LINKS=true
-
-      # Optional:
-      # - PASSWORD_HASH=$$2y$$10$$hBCoykrB95WSzuV4fafBzOHWKu9sbyVa34GJr8VV5R/pIelfEMYyG (needs double $$, hash of 'foobar123'; see "How_to_generate_an_bcrypt_hash.md" for generate the hash)
-      # - PORT=51821
-      # - WG_PORT=51820
+      # Опционально:
       # - WG_CONFIG_PORT=92820
-      # - WG_DEFAULT_ADDRESS=10.8.0.x
-      # - WG_DEFAULT_DNS=1.1.1.1
-      # - WG_MTU=1420
-      # - WG_ALLOWED_IPS=192.168.15.0/24, 10.0.1.0/24
-      # - WG_PERSISTENT_KEEPALIVE=25
       # - WG_PRE_UP=echo "Pre Up" > /etc/wireguard/pre-up.txt
       # - WG_POST_UP=echo "Post Up" > /etc/wireguard/post-up.txt
       # - WG_PRE_DOWN=echo "Pre Down" > /etc/wireguard/pre-down.txt
       # - WG_POST_DOWN=echo "Post Down" > /etc/wireguard/post-down.txt
-      # - UI_TRAFFIC_STATS=true
-      # - UI_CHART_TYPE=0 # (0 Charts disabled, 1 # Line chart, 2 # Area chart, 3 # Bar chart)
-      # - WG_ENABLE_ONE_TIME_LINKS=true
-      # - UI_ENABLE_SORT_CLIENTS=true
       # - WG_ENABLE_EXPIRES_TIME=true
       # - ENABLE_PROMETHEUS_METRICS=false
-      # - PROMETHEUS_METRICS_PASSWORD=$$2a$$12$$vkvKpeEAHD78gasyawIod.1leBMKg8sBwKW.pQyNsq78bXV3INf2G # (needs double $$, hash of 'prometheus_password'; see "How_to_generate_an_bcrypt_hash.md" for generate the hash)
+      # - PROMETHEUS_METRICS_PASSWORD=$$2a$$12$$ldlVdG4gG0B0b0AOw02OnuKFXizGdSj2ny8jfM0fGVQzsBoR7YzNC
 
-    image: ghcr.io/wg-easy/wg-easy:latest
+    image: ghcr.io/wg-easy/wg-easy:${WGE_TAG}
     container_name: wg-easy
     volumes:
-      - wg:/etc/wireguard
+      - ${V_ETC_WIREGUAD}:/etc/wireguard
     ports:
-      - "55555:55555/udp"
-      - "8080:8080/tcp"
+      - "${WG_PORT}:${WG_PORT}/udp"
+      - "${WGE_PORT}:${WGE_PORT}/tcp"
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
-      # - NET_RAW # ⚠️ Uncomment if using Podman
+      # - NET_RAW # Раскомментируйте, если используете Podman
     sysctls:
       - net.ipv4.ip_forward=1
       - net.ipv4.conf.all.src_valid_mark=1
